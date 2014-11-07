@@ -1,0 +1,67 @@
+startPrefs()
+
+Events = Application('System Events')
+
+Prefs = Events.processes['System Preferences']
+
+Prefs.windows[0].scrollAreas[0].buttons.byName("Sharing").click()
+
+delay(1)
+
+ShareWindow = Application("System Events").applicationProcesses.byName("System Preferences").windows.byName("Sharing")
+
+ShareWindow.groups.at(0).scrollAreas.at(0).tables.at(0).rows.at(7).select()
+
+ShareWindow.groups.at(0).popUpButtons.at(0).click().menus.at(0).menuItems.byName("Ethernet").click()
+
+delay(1)
+
+portRows = ShareWindow.groups.at(0).scrollAreas.at(1).tables.at(0).rows()
+
+for (i in portRows) {
+    if (portRows[i].textFields.at(0).value() == "Wi-Fi") {
+		if (portRows[i].checkboxes.at(0).value() == 0) {
+		    portRows[i].select()
+			portRows[i].checkboxes.at(0).click()
+		}
+	}
+	else {
+		if (portRows[i].checkboxes.at(0).value() == 1) {
+		    portRows[i].select()
+			portRows[i].checkboxes.at(0).click()
+		}
+	}
+}
+
+ShareWindow.groups.at(0).scrollAreas.at(0).tables.at(0).rows.at(7).select()
+
+ShareWindow.groups.at(0).scrollAreas.at(0).tables.at(0).rows.at(7).checkboxes.at(0).click()
+
+delay(1)
+
+ShareWindow.sheets.at(0).buttons.byName("Start").click()
+
+delay(30)
+
+ShareWindow.groups.at(0).scrollAreas.at(0).tables.at(0).rows.at(7).select()
+
+ShareWindow.groups.at(0).scrollAreas.at(0).tables.at(0).rows.at(7).checkboxes.at(0).click()
+
+Prefs.quit()
+
+Prefs = Application('System Preferences')
+
+Prefs.quit()
+
+function startPrefs() {
+	Prefs = Application('System Preferences')
+
+	Prefs.activate()
+	
+	delay(2)
+	
+	if (Prefs.windows[0].name() != "System Preferences") {
+		Prefs.quit()
+		startPrefs()
+	}
+}
